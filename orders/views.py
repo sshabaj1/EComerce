@@ -5,11 +5,14 @@ from cart.cart import Cart
 
 
 def order_create(request):
+    print('hynn')
     cart = Cart(request)
+    print('CART::', cart)
     if request.method == "POST":
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            print('order after save::',order)
             for item in cart:
                 OrderItem.objects.create(order=order,
                                         product=item['product'],
@@ -17,10 +20,13 @@ def order_create(request):
                                         quantity=item['quantity'])
 
             #clear the cart
+            print('order bf clear cart::',order)
             cart.clear()
+            print('order::',order)
             return render(request,
                         'orders/order/created.html',
                         {'order': order})
+        
     else:
         form = OrderCreateForm()
     return render(request,
