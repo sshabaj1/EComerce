@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
@@ -6,7 +6,7 @@ from .tasks import order_created
 from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 from .models import Order
-
+from django.urls import reverse
 
 
 
@@ -35,10 +35,12 @@ def order_create(request):
                     f'Your order ID is {order_id}.'
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
             msg.send()
+            request.session['order_id'] = order_id
+            return redirect(reverse('payment:process'))
             # order_created.delay(order.id)
-            return render(request,
-                        'orders/order/created.html',
-                        {'order': order})
+            # return render(request,
+            #             'orders/order/created.html',
+            #             {'order': order})
         
     else:
         form = OrderCreateForm()
