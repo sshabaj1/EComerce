@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
-from .tasks import order_created
 from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 from .models import Order
