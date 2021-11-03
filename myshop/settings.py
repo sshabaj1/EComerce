@@ -140,3 +140,18 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'senadshabaj73@gmail.com'
 EMAIL_HOST_PASSWORD = 'iyagdyakcgpvpist'
+
+
+
+BRAINTREE_MERCHANT_ID = 'qry7kc6398dfwyjf'
+BRAINTREE_PUBLIC_KEY = 'pnyvx7my5b3bm3g3'
+BRAINTREE_PRIVATE_KEY = '882e5a618f71b1f56d9264b488ed5c77'
+
+import braintree
+
+BRAINTREE_CONF = braintree.Configuration(
+    braintree.Environment.Sandbox,
+    BRAINTREE_MERCHANT_ID,
+    BRAINTREE_PUBLIC_KEY,
+    BRAINTREE_PRIVATE_KEY
+)
