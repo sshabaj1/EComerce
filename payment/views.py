@@ -1,8 +1,12 @@
+from io import BytesIO
 import braintree
 from braintree import client_token
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from orders.models import Order
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+import weasyprint
 
 
 # gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
@@ -84,6 +88,17 @@ def payment_process(request):
                     'client_token': client_token})
 
 def payment_done(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    subject, from_email, to = f'My Shop - EE Invoice no. {order.id}', 'senadshabaj73@gmail.com', order.email
+    text_content =  f'Please, find attachment the invoice for your recent purchase'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    html = render_to_string('orders/order/pdf.html', {'order': order})
+    out = BytesIO()
+    stylesheets = [weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')]
+    weasyprint.HTML(string=html).write_pdf(out, stylesheets=stylesheets)
+    msg.attach(f'order_{order.id}.pdf', out.getvalue(), 'application/pdf')
+    msg.send()
     return render(request, 'payment/done.html')
 
 
