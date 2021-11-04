@@ -90,7 +90,7 @@ def payment_process(request):
 def payment_done(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
-    subject, from_email, to = f'My Shop - EE Invoice no. {order.id}', 'senadshabaj73@gmail.com', order.email
+    subject, from_email, to = f'Genie - EE Invoice no. {order.id}', 'senadshabaj73@gmail.com', order.email
     text_content =  f'Please, find attachment the invoice for your recent purchase'
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     html = render_to_string('orders/order/pdf.html', {'order': order})
