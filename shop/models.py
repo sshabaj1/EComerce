@@ -19,11 +19,24 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('shop:product_list_by_category', args=[self.slug])
     
+
+class Brand(models.Model):
+    name = models.CharField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, unique=True)
     
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'brand'
+        verbose_name_plural = 'brands'
+
+   
+    def __str__(self):
+        return self.name    
 
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    brand_name = models.ForeignKey(Brand, null=True, related_name='brands', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, unique=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
