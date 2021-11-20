@@ -13,6 +13,7 @@ import weasyprint
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+import os.path
 
 
 
@@ -74,6 +75,5 @@ def admin_order_pdf(request, order_id):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'filename=order_{order.id}.pdf'
     weasyprint.HTML(string=html).write_pdf(response,
-        stylesheets=[weasyprint.CSS(
-            settings.STATIC_ROOT + 'css/pdf.css')])
+        stylesheets = [weasyprint.CSS(os.path.join(settings.STATIC_ROOT, 'css', 'pdf.css'))])
     return response
