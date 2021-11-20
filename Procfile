@@ -1,0 +1,1 @@
+web gunicorn Genie.wsgi:application --log-file -

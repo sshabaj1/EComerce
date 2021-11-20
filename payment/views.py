@@ -1,3 +1,4 @@
+import os.path
 from io import BytesIO
 import braintree
 from braintree import client_token
@@ -95,7 +96,7 @@ def payment_done(request):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     html = render_to_string('orders/order/pdf.html', {'order': order})
     out = BytesIO()
-    stylesheets = [weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')]
+    stylesheets = [weasyprint.CSS(os.path.join(settings.STATIC_ROOT, 'css', 'pdf.css'))]
     weasyprint.HTML(string=html).write_pdf(out, stylesheets=stylesheets)
     msg.attach(f'order_{order.id}.pdf', out.getvalue(), 'application/pdf')
     msg.send()
